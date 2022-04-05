@@ -1,3 +1,20 @@
+<?php
+  session_start();
+
+  if (!empty($_SESSION['activo'])) {
+    header("Location:panel.php");
+  }
+
+  //obtener variables
+    $idUsuario = $_SESSION['id'];
+    $nombre = $_SESSION['nombre'];
+    $email = $_SESSION['email'];
+  //Incluir conexion
+  include_once("conexionsqlserver.php");
+
+
+ ?>
+
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
@@ -19,15 +36,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- daterange picker -->
   <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
-  
+
   <!-- Tempusdominus Bbootstrap 4 -->
   <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
-  
+
   <!-- Bootstrap4 Duallistbox -->
   <link rel="stylesheet" href="plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
- 
+
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
@@ -40,10 +57,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <ul class="navbar-nav">
       <li class="nav-item">
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-      </li>     
-    </ul>   
+      </li>
+    </ul>
 
-    
+
   </nav>
   <!-- /.navbar -->
 
@@ -63,7 +80,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="image">
           <img src="dist/img/images.png" class="img-circle elevation-2" alt="User Image">
         </div>
-        <div class="info">         
+        <div class="info">
           <p class="text-white">test</p>
           <p class="text-white">test email</p>
         </div>
@@ -74,12 +91,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-         
+
           <li class="nav-item">
             <a href="panel.php" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
               <p>
-                Panel de control        
+                Panel de control
               </p>
             </a>
           </li>
@@ -87,28 +104,28 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <a href="lista_notas.php" class="nav-link">
               <i class="nav-icon fas fa-user-cog"></i>
               <p>
-                Lista de Notas     
+                Lista de Notas
               </p>
             </a>
           </li>
-          
+
             <li class="nav-item">
               <a href="lista_usuarios.php" class="nav-link">
                 <i class="nav-icon fas fa-users"></i>
                 <p>
-                  Lista de Usuarios      
+                  Lista de Usuarios
                 </p>
               </a>
             </li>
-            
+
           <li class="nav-item">
             <a href="salir.php" class="nav-link">
               <i class="nav-icon fas fa-sign-out-alt"></i>
               <p>
-                Salir      
+                Salir
               </p>
             </a>
-          </li>        
+          </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
@@ -116,7 +133,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- /.sidebar -->
   </aside>
 
-  
+
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -125,7 +142,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <div class="col-sm-6">
             <h1>App de notas PHP, PDO y SQL SERVER</h1>
           </div>
-          
+
         </div>
       </div><!-- /.container-fluid -->
     </section>
@@ -134,5 +151,5 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <section class="content">
       <div class="container-fluid">
         <div class="row">
-          <div class="col-12">          
+          <div class="col-12">
             <div class="card">

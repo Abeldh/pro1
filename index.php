@@ -1,3 +1,48 @@
+<?php
+  session_start();
+  include_once("conexionsqlserver.php");
+
+    //Validar si sesion esta activa
+    if (!empty($_SESSION['activo'])) {
+      header("Location:panel.php");
+    }
+  if (isset($_POST["ingresar"])) {
+
+    $email = $_POST["email"];
+    $pass = md5($_POST["password"]);
+
+    if (!empty($email) && $email != "" && !empty($pass) && $pass != "" ) {
+
+      $query = "SELECT * from usuario where email =:email AND pass =:password";
+        //Sentencia
+      $stmt =  $conn->prepare($query);
+
+      $stmt -> bindParam(":email", $email, PDO::PARAM_STR);
+      $stmt -> bindParam(":password", $pass, PDO::PARAM_STR);
+
+      $resultado = $stmt->execute();
+      $registro  = $stmt->fetch(PDO::FETCH_ASSOC);
+
+      if (!$registro) {
+        $error = "Error, acceso invalido";
+      }else {
+        //Se crean sesiones
+        $_SESSION['activo'] = true;
+        $_SESSION['idUsuario'] = $registro['id'];
+        $_SESSION['nombre'] = $registro['nombre'];
+        $_SESSION['email'] = $registro['email'];
+        $_SESSION['esAdmin'] = $registro['es_admin'];
+
+        //Redireccion a pagina despues que el usuario se haya conectado de manera correcta
+        header("Location:panel.php");
+      }
+    }else {
+      $error ="Algunos campos estan vacios";
+    }
+  }
+ ?>
+
+
 <!doctype html>
 <html lang="es">
   <head>
@@ -13,45 +58,32 @@
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- daterange picker -->
   <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
-  
+
   <!-- Tempusdominus Bbootstrap 4 -->
   <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
-  
+
   <!-- Bootstrap4 Duallistbox -->
   <link rel="stylesheet" href="plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
- 
+
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-		
+
     <title>App Notas PHP, PDO y SQL Server</title>
   </head>
   <body class="hold-transition login-page">
 
   <div class="row">
     <div class="col-sm-12">
-   
-
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong>Mensaje
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>           
-
-      
-    </div>
-</div>
-
-  <div class="row">
-    <div class="col-sm-12">
-      
+      <?php if (isset($error)) : ?>
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <strong>Error</strong> 
+                <strong><?php echo $error; ?></strong>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-      
+          <?php endif; ?>
     </div>
 </div>
 
@@ -84,14 +116,14 @@
           </div>
         </div>
         <div class="row">
-          
+
           <!-- /.col -->
           <div class="col-sm-12">
             <button type="submit" name="ingresar" class="btn btn-primary d-block w-100"><i class="fas fa-user"></i> Ingresar</button>
           </div>
           <!-- /.col -->
         </div>
-      </form>  
+      </form>
 
     </div>
     <!-- /.login-card-body -->
